@@ -105,3 +105,28 @@ a {
     color-scheme: dark;
   }
 }
+
+.author {
+font-size: 1.3rem;
+}
+
+.posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 48px;
+
+}
+
+.post {
+}
+
+.text {
+  font-size: 60px;
+  color: black;
+}
+
+.title {
+  font-size: 2rem;
+  line-height: 1.5;
+}
+
