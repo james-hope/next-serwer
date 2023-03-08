@@ -33,7 +33,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const postsAmount = posts.length; //500
   // @ts-ignore
   const allPaths = [...Array(postsAmount).keys()].map((el) => ({
-    params: { pageNumber: el },
+    params: { pageNumber: String(el) },
   }));
 
   return {
