@@ -1,8 +1,8 @@
-import { fetchPost } from "@/api/api";
+import { fetchAllPosts, fetchPost } from "@/api/api";
 import Post from "@/components/Post";
 import styles from "@/styles/Home.module.css";
 import { Inter } from "next/font/google";
-import { GetServerSideProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { PostT } from "@/types/types";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,9 +28,24 @@ const BlogPost = ({ pageNumber, postPerPage }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const posts = await fetchAllPosts();
+  const postsAmount = posts.length; //500
+  // @ts-ignore
+  const allPaths = [...Array(postsAmount).keys()].map((el) => ({
+    params: { pageNumber: el },
+  }));
+
+  return {
+    paths: allPaths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
   const {
-    query: { pageNumber },
+    // @ts-ignore
+    params: { pageNumber },
   } = ctx;
 
   const postPerPage = await fetchPost(pageNumber as string);
