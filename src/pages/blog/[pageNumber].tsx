@@ -4,6 +4,7 @@ import styles from "@/styles/Home.module.css";
 import { Inter } from "next/font/google";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { PostT } from "@/types/types";
+import { useRouter } from "next/router";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,6 +14,12 @@ type Props = {
 };
 
 const BlogPost = ({ pageNumber, postPerPage }: Props) => {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <p>zupazupazupa</p>;
+  }
+
   return (
     <main className={`${styles.main} ${inter.className}`}>
       <div className={`${inter.className} ${styles.center} text`}>
@@ -36,7 +43,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: allPaths,
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
