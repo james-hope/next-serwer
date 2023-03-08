@@ -11,10 +11,15 @@ const inter = Inter({ subsets: ["latin"] });
 type Props = {
   pageNumber: number;
   postPerPage: PostT[];
+  timeStamp: string;
 };
 
-const BlogPost = ({ pageNumber, postPerPage }: Props) => {
+const BlogPost = ({ pageNumber, postPerPage, timeStamp }: Props) => {
   const router = useRouter();
+
+  const handleClick = async () => {
+    await fetch(`https://localhost:3000/api/revalidate?secret=zupa`);
+  };
 
   if (router.isFallback) {
     return <p>zupazupazupa</p>;
@@ -25,6 +30,8 @@ const BlogPost = ({ pageNumber, postPerPage }: Props) => {
       <div className={`${inter.className} ${styles.center} text`}>
         To jest strona nr {pageNumber}
       </div>
+      <p style={{ fontSize: 40 }}>timeStamp: {timeStamp}</p>
+      <button onClick={handleClick}>REVALIDUJ</button>
 
       <div className="posts">
         {postPerPage?.map((post) => (
@@ -54,9 +61,10 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   } = ctx;
 
   const postPerPage = await fetchPost(pageNumber as string);
+  const timeStamp = new Date();
 
   return {
-    props: { pageNumber, postPerPage },
+    props: { pageNumber, postPerPage, timeStamp },
   };
 };
 
