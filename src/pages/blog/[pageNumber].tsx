@@ -13,21 +13,21 @@ const BlogPost = () => {
   const [posts, setPosts] = useState<PostT[]>([]);
 
   const {
-    query: { postId },
+    query: { pageNumber },
   } = router;
 
   useEffect(() => {
     const performFetch = async () => {
-      const thePosts = await fetchPost(postId as string);
+      const thePosts = await fetchPost(pageNumber as string);
       setPosts(thePosts);
     };
     !posts.length && performFetch();
-  }, [postId, posts.length]);
+  }, [pageNumber, posts.length]);
 
   return (
     <main className={`${styles.main} ${inter.className}`}>
       <div className={`${inter.className} ${styles.center} text`}>
-        To jest strona nr {postId}
+        To jest strona nr {pageNumber}
       </div>
 
       <div className="posts">
