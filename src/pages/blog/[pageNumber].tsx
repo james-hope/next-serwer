@@ -18,7 +18,7 @@ const BlogPost = ({ pageNumber, postPerPage, timeStamp }: Props) => {
   const router = useRouter();
 
   const handleClick = async () => {
-    await fetch(`https://localhost:3000/api/revalidate?secret=zupa`);
+    await fetch(`http://localhost:3000/api/revalidate?secret=zupa`);
   };
 
   if (router.isFallback) {
