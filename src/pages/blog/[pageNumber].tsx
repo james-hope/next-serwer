@@ -61,7 +61,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   } = ctx;
 
   const postPerPage = await fetchPost(pageNumber as string);
-  const timeStamp = new Date();
+  const timeStamp = new Date().toString();
 
   return {
     props: { pageNumber, postPerPage, timeStamp },
