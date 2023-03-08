@@ -1,29 +1,18 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { PostT } from "@/types/types";
 import { fetchPost } from "@/api/api";
 import Post from "@/components/Post";
 import styles from "@/styles/Home.module.css";
 import { Inter } from "next/font/google";
+import { GetServerSideProps } from "next";
+import { PostT } from "@/types/types";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const BlogPost = () => {
-  const router = useRouter();
-  const [posts, setPosts] = useState<PostT[]>([]);
+type Props = {
+  pageNumber: number;
+  postPerPage: PostT[];
+};
 
-  const {
-    query: { pageNumber },
-  } = router;
-
-  useEffect(() => {
-    const performFetch = async () => {
-      const thePosts = await fetchPost(pageNumber as string);
-      setPosts(thePosts);
-    };
-    !posts.length && performFetch();
-  }, [pageNumber, posts.length]);
-
+const BlogPost = ({ pageNumber, postPerPage }: Props) => {
   return (
     <main className={`${styles.main} ${inter.className}`}>
       <div className={`${inter.className} ${styles.center} text`}>
@@ -31,12 +20,24 @@ const BlogPost = () => {
       </div>
 
       <div className="posts">
-        {posts?.map((post) => (
+        {postPerPage?.map((post) => (
           <Post key={post.id} post={post} />
         ))}
       </div>
     </main>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const {
+    query: { pageNumber },
+  } = ctx;
+
+  const postPerPage = await fetchPost(pageNumber as string);
+
+  return {
+    props: { pageNumber, postPerPage },
+  };
 };
 
 export default BlogPost;
