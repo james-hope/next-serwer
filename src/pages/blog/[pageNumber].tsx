@@ -65,6 +65,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 
   return {
     props: { pageNumber, postPerPage, timeStamp },
+    revalidate: 10,
   };
 };
 
