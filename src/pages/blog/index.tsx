@@ -1,24 +1,18 @@
 import Head from "next/head";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
-import { useEffect, useState } from "react";
 import { PostT } from "@/types/types";
 import { fetchAllPosts } from "@/api/api";
 import Post from "@/components/Post";
+import { GetServerSideProps } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const Index = () => {
-  const [data, setData] = useState<PostT[]>([]);
+type Props = {
+  posts: PostT[];
+};
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const posts = await fetchAllPosts();
-      setData(posts);
-    };
-    fetchPosts();
-  }, []);
-
+const Index = ({ posts }: Props) => {
   return (
     <>
       <Head>
@@ -33,13 +27,20 @@ const Index = () => {
         </div>
 
         <div className="posts">
-          {data?.map((post) => (
+          {posts?.map((post) => (
             <Post key={post.id} post={post} />
           ))}
         </div>
       </main>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const posts = await fetchAllPosts();
+  return {
+    props: { posts },
+  };
 };
 
 export default Index;
