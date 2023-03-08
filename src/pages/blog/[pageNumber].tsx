@@ -1,4 +1,4 @@
-import { fetchAllPosts, fetchPost } from "@/api/api";
+import { fetchPost } from "@/api/api";
 import Post from "@/components/Post";
 import styles from "@/styles/Home.module.css";
 import { Inter } from "next/font/google";
@@ -29,16 +29,14 @@ const BlogPost = ({ pageNumber, postPerPage }: Props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await fetchAllPosts();
-  const postsAmount = posts.length; //500
   // @ts-ignore
-  const allPaths = [...Array(postsAmount).keys()].map((el) => ({
+  const allPaths = [...Array(5).keys()].map((el) => ({
     params: { pageNumber: String(el) },
   }));
 
   return {
     paths: allPaths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
